@@ -1,0 +1,90 @@
+#include "Header.h"
+#include <iostream>
+#include <string>
+using namespace std;
+string Crypt::Encrypt(string sentence)
+{
+	int round = 26, end = 90, i;
+
+	for (i = 0; i < sentence.size(); i++)
+	{
+		if (isspace(sentence[i]) || ispunct(sentence[i]))
+		{
+			sentence.erase(i, 1);
+			i--;
+		}
+	}
+	if (sentence[0] == '\0')
+	{
+		throw 5;
+	}
+	if (shift >= round)
+	{
+		do
+		{
+			shift -= round;
+		} while (shift >= round);
+	}
+	for (i = 0; i < sentence.size(); i++)
+	{
+		if (!isalpha(sentence[i]) || !isupper(sentence[i]) || isdigit(sentence[i]))
+		{
+			throw 3;
+		}
+		sentence[i] += shift;
+		if (sentence[i] > end)
+			sentence[i] -= round;
+	}
+	transformed = sentence;
+	return transformed;
+}
+string Crypt::Decrypt(string sentence)
+{
+	int round = 26, start = 65, i;
+
+	for (i = 0; i < sentence.size(); i++)
+	{
+		if (isspace(sentence[i]) || ispunct(sentence[i]))
+		{
+			sentence.erase(i, 1);
+			i--;
+		}
+	}
+	if (sentence[0] == '\0')
+	{
+		throw 5;
+	}
+	if (shift >= round)
+	{
+		do
+		{
+			shift -= round;
+		} while (shift >= round);
+	}
+	for (i = 0; i < sentence.size(); i++)
+	{
+		if (!isalpha(sentence[i]) || !isupper(sentence[i]) || isdigit(sentence[i]))
+		{
+			throw 4;
+		}
+		for (i = 0; i < sentence.size(); i++)
+		{
+			sentence[i] -= shift;
+			if (sentence[i] < start)
+				sentence[i] += round;
+		}
+	}
+	transformed = sentence;
+	return transformed;
+}
+void Crypt::Output()
+{
+	cout << transformed;
+}
+Crypt::~Crypt()
+{
+	if (shift != 0)
+		shift = 0;
+	if (transformed[0] != '\0')
+		transformed[0] = '\0';
+}
