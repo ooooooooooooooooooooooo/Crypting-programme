@@ -1,0 +1,16 @@
+#pragma once
+#include <string>
+#include <exception>
+using namespace std;
+class Crypt
+{
+private:
+	int shift;
+	string transformed;
+public:
+	Crypt(int key) : shift(key) {};
+	string Encrypt(string sentence);
+	string Decrypt(string sentence);
+	void Output();
+	~Crypt();
+};
